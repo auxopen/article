@@ -367,7 +367,7 @@ function lib.new(lib_name, theme_list) -- im using ';' to indicate the end of th
 		Parent = gui,
 		BackgroundColor3 = current_theme.Background,
 		Position = UDim2.new(0.5, -335.75, 0.5, -226),
-		Size = UDim2.fromOffset(671.5, 415)
+		Size = UDim2.fromOffset(655, 355)
 	}, {
 		create_instance("UICorner", {
 			CornerRadius = UDim.new(0.025, 0)
