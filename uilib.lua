@@ -780,19 +780,19 @@ function lib.new(lib_name, theme_list) -- im using ';' to indicate the end of th
 					ZIndex = 2,
 				},{
 					create_instance("UICorner", {
-						CornerRadius = UDim.new(0.2, 0)
+						CornerRadius = UDim.new(0.15, 0)
 					}),
 					
 					create_instance("Frame", {
 						Name = "toggleui",
-						BackgroundColor3 = (state and Color3.fromRGB(85, 255, 0) or Color3.fromRGB(220, 20, 60)),
+						BackgroundColor3 = (state and (current_theme == utility.preset_themes.darktheme and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(85, 255, 0)) or (current_theme == utility.preset_themes.darktheme and Color3.fromRGB(0, 0, 0) or Color3.fromRGB(220, 20, 60))),
 						BorderSizePixel = 0,
 						Position = (state and UDim2.fromScale(0.5, 0) or UDim2.fromScale(0, 0)),
 						Size = UDim2.fromScale(0.5, 1),
 						ZIndex = 3,
 					},{
 						create_instance("UICorner", {
-							CornerRadius = UDim.new(0.3, 0)
+							CornerRadius = UDim.new(0.2, 0)
 						})
 					}),
 					
@@ -811,17 +811,44 @@ function lib.new(lib_name, theme_list) -- im using ';' to indicate the end of th
 			theme_gui_objects[toggle_instance.Title] = "TextColor"
 			theme_gui_objects[toggle_instance.toggle] = "Background"
 			
+
+			
 			update_canvas()
 			
 			
 			local current_state = state
+			
+			toggle_instance:GetPropertyChangedSignal("BackgroundColor3"):Connect(function()
+				if (current_state) then 
+					if (current_theme == utility.preset_themes.darktheme) then
+						utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(255, 255, 255), Position = UDim2.fromScale(0.5, 0) }, .1)
+					else
+						utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(85, 255, 0), Position = UDim2.fromScale(0.5, 0) }, .1)
+					end
+				else 
+					if (current_theme == utility.preset_themes.darktheme) then
+						utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(0, 0, 0), Position = UDim2.fromScale(0, 0) }, .1)
+					else
+						utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(220, 20, 60), Position = UDim2.fromScale(0, 0) }, .1)
+					end
+				end
+			end)
+			
 			if callback then
 				main_connections:Connect(toggle_instance.toggle.button.MouseButton1Click, function() 
 					current_state = not current_state
 					if current_state then
-						utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(85, 255, 0), Position = UDim2.fromScale(0.5, 0) }, .1)
+						if (current_theme == utility.preset_themes.darktheme) then
+							utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(255, 255, 255), Position = UDim2.fromScale(0.5, 0) }, .1)
+						else
+							utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(85, 255, 0), Position = UDim2.fromScale(0.5, 0) }, .1)
+						end
 					else
-						utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(220, 20, 60), Position = UDim2.fromScale(0, 0) }, .1)
+						if (current_theme == utility.preset_themes.darktheme) then
+							utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(0, 0, 0), Position = UDim2.fromScale(0, 0) }, .1)
+						else
+							utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(220, 20, 60), Position = UDim2.fromScale(0, 0) }, .1)
+						end
 					end
 					utility.call_function(callback, current_state)
 				end)
@@ -836,9 +863,17 @@ function lib.new(lib_name, theme_list) -- im using ';' to indicate the end of th
 				
 				if new_state then
 					if new_state then
-						utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(85, 255, 0), Position = UDim2.fromScale(0.5, 0) }, .1)
+						if (current_theme == utility.preset_themes.darktheme) then
+							utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(255, 255, 255), Position = UDim2.fromScale(0.5, 0) }, .1)
+						else
+							utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(85, 255, 0), Position = UDim2.fromScale(0.5, 0) }, .1)
+						end
 					else
-						utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(220, 20, 60), Position = UDim2.fromScale(0, 0) }, .1)
+						if (current_theme == utility.preset_themes.darktheme) then
+							utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(0, 0, 0), Position = UDim2.fromScale(0, 0) }, .1)
+						else
+							utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(220, 20, 60), Position = UDim2.fromScale(0, 0) }, .1)
+						end
 					end
 					current_state = new_state
 					utility.call_function(callback, new_state)
@@ -1907,7 +1942,7 @@ function lib.new(lib_name, theme_list) -- im using ';' to indicate the end of th
 				elseif (string.lower(color_type):find("background") and typeof(color) == "Color3") then
 					current_theme.Background = color
 				elseif (string.lower(color_type):find("header") and typeof(color) == "Color3") then
-					current_theme.header = color
+					current_theme.Header = color
 				elseif (string.lower(color_type):find("text") and typeof(color) == "Color3") then
 					current_theme.TextColor = color
 				elseif (string.lower(color_type):find("element") and typeof(color) == "Color3") then
@@ -1990,11 +2025,14 @@ function lib.new(lib_name, theme_list) -- im using ';' to indicate the end of th
 		frame_window:Destroy()
 		
 		while task.wait() do -- waits til all notifacations are gone
-			local des = gui:FindFirstChild("notis"):GetDescendants()
-			if (#des <= 4) then 
-				gui:Destroy()
-				break
-			end
+			local des = gui:FindFirstChild("notis")
+			if (des) then 
+				des = des:GetDescendants()
+				if (#des <= 4) then 
+					gui:Destroy()
+					break
+				end
+			else break end
 		end
 	end
 
