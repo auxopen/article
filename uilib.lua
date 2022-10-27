@@ -43,7 +43,7 @@ utility.primary_font = {
 }
 
 utility.preset_themes = { -- I got this from kavo :troll:
-	darktheme = {
+	dark = {
 		SchemeColor = Color3.fromRGB(64, 64, 64),
 		Background = Color3.fromRGB(24, 24, 24),
 		Header = Color3.fromRGB(18, 18, 18),
@@ -51,7 +51,7 @@ utility.preset_themes = { -- I got this from kavo :troll:
 		ElementColor = Color3.fromRGB(15, 15, 15)
 	};
 
-	lighttheme = {
+	light = {
 		SchemeColor = Color3.fromRGB(150, 150, 150),
 		Background = Color3.fromRGB(255,255,255),
 		Header = Color3.fromRGB(200, 200, 200),
@@ -73,6 +73,46 @@ utility.preset_themes = { -- I got this from kavo :troll:
 		Header = Color3.fromRGB(38, 45, 71),
 		TextColor = Color3.fromRGB(200, 200, 200),
 		ElementColor = Color3.fromRGB(38, 45, 71)
+	};
+	
+	blood = {
+		SchemeColor = Color3.fromRGB(227, 27, 27),
+		Background = Color3.fromRGB(10, 10, 10),
+		Header = Color3.fromRGB(5, 5, 5),
+		TextColor = Color3.fromRGB(255,255,255),
+		ElementColor = Color3.fromRGB(20, 20, 20)
+	};
+	
+	grape = {
+		SchemeColor = Color3.fromRGB(166, 71, 214),
+		Background = Color3.fromRGB(64, 50, 71),
+		Header = Color3.fromRGB(36, 28, 41),
+		TextColor = Color3.fromRGB(255,255,255),
+		ElementColor = Color3.fromRGB(74, 58, 84)
+	};
+	
+	midnight = {
+		SchemeColor = Color3.fromRGB(26, 189, 158),
+		Background = Color3.fromRGB(44, 62, 82),
+		Header = Color3.fromRGB(57, 81, 105),
+		TextColor = Color3.fromRGB(255, 255, 255),
+		ElementColor = Color3.fromRGB(52, 74, 95)
+	};
+	
+	sentinel = {
+		SchemeColor = Color3.fromRGB(230, 35, 69),
+		Background = Color3.fromRGB(32, 32, 32),
+		Header = Color3.fromRGB(24, 24, 24),
+		TextColor = Color3.fromRGB(119, 209, 138),
+		ElementColor = Color3.fromRGB(24, 24, 24)
+	};
+	
+	serpent = {
+		SchemeColor = Color3.fromRGB(0, 166, 58),
+		Background = Color3.fromRGB(31, 41, 43),
+		Header = Color3.fromRGB(22, 29, 31),
+		TextColor = Color3.fromRGB(255,255,255),
+		ElementColor = Color3.fromRGB(22, 29, 31)
 	};
 }
 
@@ -653,6 +693,7 @@ function lib.new(lib_name, theme_list) -- im using ';' to indicate the end of th
 					TextWrapped = true
 				})
 			})
+			
 			
 			theme_gui_objects[label_instance] = "ElementColor"
 			theme_gui_objects[label_instance.Title] = "TextColor"
@@ -1503,8 +1544,10 @@ function lib.new(lib_name, theme_list) -- im using ';' to indicate the end of th
 				if (old_text and new_text) then
 					if (dropdown_instance.content.content:FindFirstChild(new_text)) then utility.assert(nil, "unable to edit since dropdown item already exist!", 2) return end
 					local bttn = dropdown_instance.content.content:FindFirstChild(old_text)
-					bttn.Name = new_text
-					bttn.title.Text = new_text
+					if (bttn:IsA("Frame")) then 
+						bttn.Name = new_text
+						bttn.title.Text = new_text
+					end
 				end
 			end
 			
@@ -1519,6 +1562,16 @@ function lib.new(lib_name, theme_list) -- im using ';' to indicate the end of th
 					
 					dropdown_buttons[i] = nil
 					i:Destroy() -- i is the instance
+				end
+			end
+			
+			function dropdown:update(txt)
+				local bttn = dropdown_instance.content.content:FindFirstChild(tostring(txt))
+				if (txt and bttn) then 
+					if (bttn:IsA("Frame")) then 
+						current_selected = txt
+						call_func(txt)
+					end
 				end
 			end
 			
