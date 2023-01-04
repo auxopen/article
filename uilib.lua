@@ -902,7 +902,7 @@ function lib.new(lib_name, theme_list) -- im using ';' to indicate the end of th
 					toggle_instance.Title.Text = new_text
 				end
 				
-				if new_state then
+				if new_state ~= nil then
 					if new_state then
 						if (current_theme == utility.preset_themes.darktheme) then
 							utility.tween_obj(toggle_instance.toggle.toggleui, { BackgroundColor3 = Color3.fromRGB(255, 255, 255), Position = UDim2.fromScale(0.5, 0) }, .1)
